@@ -336,6 +336,9 @@ void display_shop_items(struct globals *glb)
             cursor_pos_y = 0;
             break;
         case KEY_ESCAPE:
+            //let the shop refresh the items
+            glb->game_stat.shop_updated = 0;
+            remove_list(glb);
             exit_shop = 1;
             break;
         default:
@@ -1142,6 +1145,7 @@ void display_monster_hunt_screen(struct globals *glb)
             exit_disp = 1;
             break;
         case KEY_ESCAPE:
+            remove_monster_list(glb);
             exit_disp = 1;
             break;
         default:
