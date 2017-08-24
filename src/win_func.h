@@ -2,7 +2,7 @@
 #define WIN_CONSOLE_H
 
 #include <windows.h>
-#include <sys/timeb.h>
+#include <sys/time.h>
 #include "global_handler.h"
 
 #define FC_RED      FOREGROUND_RED

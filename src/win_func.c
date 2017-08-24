@@ -44,17 +44,21 @@ void create_input_handle(struct globals *globals){
 
 double get_time(void)
 {
-    struct timeb timebuffer;
+
     double seconds;
-    double milliseconds;
+    double microseconds;
     double sum;
 
-    ftime( &timebuffer );
+    struct timeval *tv = (struct timeval*)malloc(sizeof(struct timeval));
 
-    seconds = (double) timebuffer.time;
-    milliseconds = (double) timebuffer.millitm;
+    gettimeofday(tv,NULL);
 
-    sum = seconds + (milliseconds / 1000);
+    seconds = (double) tv->tv_sec;
+    microseconds = (double) tv->tv_usec;
+
+    sum = seconds + (microseconds / 1000000);
+
+    free(tv);
 
     return sum;
 }

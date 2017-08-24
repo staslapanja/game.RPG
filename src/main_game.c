@@ -1236,7 +1236,7 @@ void monster_encounter(int monster_sel, struct globals *glb)
         }
 
         //draw the key box
-        draw_key_request(46,16,rand_key,glb);
+        draw_key_request(46,16,rand_key,FC_WHITE,glb);
 
         //react to input
         get_input_key(glb);
@@ -1274,9 +1274,15 @@ void monster_encounter(int monster_sel, struct globals *glb)
                 sprintf(text_holder, "%s dealt %.0f damage",glb->char_stat.name,damage );
                 add_to_textbuf(text_holder,textbuf,&p,textbuf_h,glb);
                 monster_hp = monster_hp - damage;
+                draw_key_request(46,16,rand_key,FCI_GREEN,glb);
             } else {
                 sprintf(text_holder, "%s missed!",glb->char_stat.name );
                 add_to_textbuf(text_holder,textbuf,&p,textbuf_h,glb);
+                draw_key_request(46,16,rand_key,FCI_RED,glb);
+                if (glb->char_stat.xp_mod >= 1.1) {
+                    glb->char_stat.xp_mod-= 0.1;
+                    add_to_textbuf("XP modifier -10%",textbuf,&p,textbuf_h,glb);
+                }
             }
             player_action = 0;
             next_rand_key = 1;
@@ -1523,46 +1529,47 @@ short make_rand_key()
     return rand_key;
 }
 
-void draw_key_request(int x, int y, short rand_key, struct globals *glb)
+void draw_key_request(int x, int y, short rand_key, unsigned short color, struct globals *glb)
 {
     int i;
     char ch[2];
+
     //frame
     ch[1] = 0x0;
     ch[0] = 0xda;
-    text_selectWindow_buf(x,y,ch,FC_WHITE,glb);
-    text_selectWindow_buf(x+1,y,"-----",FC_WHITE,glb);
+    text_selectWindow_buf(x,y,ch,color,glb);
+    text_selectWindow_buf(x+1,y,"-----",color,glb);
     ch[0] = 0xbf;
-    text_selectWindow_buf(x+6,y,ch,FC_WHITE,glb);
+    text_selectWindow_buf(x+6,y,ch,color,glb);
     ch[0] = 0xb3;
     for (i=1; i < 4; i++){
-        text_selectWindow_buf(x,y+i,ch,FC_WHITE,glb);
-        text_selectWindow_buf(x+6,y+i,ch,FC_WHITE,glb);
+        text_selectWindow_buf(x,y+i,ch,color,glb);
+        text_selectWindow_buf(x+6,y+i,ch,color,glb);
     }
     ch[0] = 0xc0;
-    text_selectWindow_buf(x,y+4,ch,FC_WHITE,glb);
-    text_selectWindow_buf(x+1,y+4,"-----",FC_WHITE,glb);
+    text_selectWindow_buf(x,y+4,ch,color,glb);
+    text_selectWindow_buf(x+1,y+4,"-----",color,glb);
     ch[0] = 0xd9;
-    text_selectWindow_buf(x+6,y+4,ch,FC_WHITE,glb);
+    text_selectWindow_buf(x+6,y+4,ch,color,glb);
 
     //draw selected arrow
     switch(rand_key)
     {
     case KEY_DOWN:
-        text_selectWindow_buf(x+3,y+1,"|",FC_WHITE,glb);
-        text_selectWindow_buf(x+3,y+2,"|",FC_WHITE,glb);
-        text_selectWindow_buf(x+3,y+3,"v",FC_WHITE,glb);
+        text_selectWindow_buf(x+3,y+1,"|",color,glb);
+        text_selectWindow_buf(x+3,y+2,"|",color,glb);
+        text_selectWindow_buf(x+3,y+3,"v",color,glb);
         break;
     case KEY_UP:
-        text_selectWindow_buf(x+3,y+1,"^",FC_WHITE,glb);
-        text_selectWindow_buf(x+3,y+2,"|",FC_WHITE,glb);
-        text_selectWindow_buf(x+3,y+3,"|",FC_WHITE,glb);
+        text_selectWindow_buf(x+3,y+1,"^",color,glb);
+        text_selectWindow_buf(x+3,y+2,"|",color,glb);
+        text_selectWindow_buf(x+3,y+3,"|",color,glb);
         break;
     case KEY_LEFT:
-        text_selectWindow_buf(x+2,y+2,"<--",FC_WHITE,glb);
+        text_selectWindow_buf(x+2,y+2,"<--",color,glb);
         break;
     case KEY_RIGHT:
-        text_selectWindow_buf(x+2,y+2,"-->",FC_WHITE,glb);
+        text_selectWindow_buf(x+2,y+2,"-->",color,glb);
         break;
     default:
         break;
